@@ -1,0 +1,134 @@
+[
+  {
+    "notification_id": "NOTIF-001",
+    "recipient_role": "Purchase Manager",
+    "type": "STOCKOUT_ALERT",
+    "priority": "CRITICAL",
+    "title": "Critical Stockout Risk: Spindle Bearing 7210-B",
+    "message": "Part PRT-BRG-1001 inventory (9 units) has only 12 days coverage against 12-day lead time. Scheduled overhaul requires 4 units.",
+    "read": false,
+    "created_at": "2026-10-31T09:35:11.749425",
+    "created_by": "Autonomous Stockout Predictor"
+  },
+  {
+    "notification_id": "NOTIF-002",
+    "recipient_role": "Purchase Manager",
+    "type": "STOCKOUT_ALERT",
+    "priority": "CRITICAL",
+    "title": "Critical Stockout Risk: Proportional Valve 4WRPE",
+    "message": "Part PRT-HYD-2001 stock (3 units) is at safety threshold. Lead time is 18 days from Bosch Rexroth.",
+    "read": false,
+    "created_at": "2026-10-31T07:35:11.749425",
+    "created_by": "Autonomous Stockout Predictor"
+  },
+  {
+    "notification_id": "NOTIF-003",
+    "recipient_role": "Maintenance Team",
+    "type": "MAINTENANCE_WARNING",
+    "priority": "HIGH",
+    "title": "Upcoming 500-Ton Forging Press Servicing",
+    "message": "Preventive maintenance scheduled on MCH-HYD-101 in 3 days. Ensure High Pressure Filter Element is staged.",
+    "read": false,
+    "created_at": "2026-10-31T05:35:11.749425",
+    "created_by": "Maintenance Monitor"
+  },
+  {
+    "notification_id": "NOTIF-004",
+    "recipient_role": "Inventory Manager",
+    "type": "REORDER_TRIGGER",
+    "priority": "MEDIUM",
+    "title": "Automated Reorder Engine Triggered",
+    "message": "15 new replenishment recommendations calculated based on ML 30-day demand forecast.",
+    "read": true,
+    "created_at": "2026-10-31T02:35:11.749425",
+    "created_by": "Reorder Optimizer"
+  },
+  {
+    "notification_id": "NOTIF-005",
+    "recipient_role": "Maintenance Team",
+    "type": "OVERDUE_ALERT",
+    "priority": "CRITICAL",
+    "title": "Overdue Maintenance: Makino D500 Milling Center",
+    "message": "Scheduled weekly calibration on MCH-CNC-01 is 2 days overdue. Spindle inspection required.",
+    "read": false,
+    "created_at": "2026-10-30T22:35:11.749425",
+    "created_by": "Maintenance Monitor"
+  },
+  {
+    "notification_id": "NOTIF-006",
+    "recipient_role": "Purchase Manager",
+    "type": "PO_UPDATE",
+    "priority": "LOW",
+    "title": "Purchase Order PO-2026-004 Dispatched",
+    "message": "Festo India confirmed dispatch of 20 Pneumatic Compact Cylinders. Expected delivery in 3 days.",
+    "read": true,
+    "created_at": "2026-10-30T10:35:11.749425",
+    "created_by": "Procurement Portal"
+  },
+  {
+    "notification_id": "NOTIF-007",
+    "recipient_role": "Inventory Manager",
+    "type": "STOCK_ADJUSTMENT",
+    "priority": "LOW",
+    "title": "Cycle Count Variance Logged",
+    "message": "Audit adjustment recorded for Fasteners Rack. +10 units added to system stock.",
+    "read": true,
+    "created_at": "2026-10-30T06:35:11.749425",
+    "created_by": "Warehouse Audit"
+  },
+  {
+    "notification_id": "NOTIF-008",
+    "recipient_role": "Purchase Manager",
+    "type": "STOCKOUT_ALERT",
+    "priority": "HIGH",
+    "title": "Helical Gearbox Drive Unit Stock Critical",
+    "message": "Part PRT-PWR-7001 current stock is 1 unit against safety stock of 2 units. Lead time is 16 days.",
+    "read": false,
+    "created_at": "2026-10-29T10:35:11.749425",
+    "created_by": "Autonomous Stockout Predictor"
+  },
+  {
+    "notification_id": "NOTIF-009",
+    "recipient_role": "Maintenance Team",
+    "type": "MAINTENANCE_WARNING",
+    "priority": "MEDIUM",
+    "title": "Kuka KR16 Welding Cell Quarterly Overhaul",
+    "message": "Quarterly overhaul scheduled in 8 days. Required Servo Motors and Encoders confirmed in stock.",
+    "read": true,
+    "created_at": "2026-10-29T04:35:11.749425",
+    "created_by": "Maintenance Monitor"
+  },
+  {
+    "notification_id": "NOTIF-010",
+    "recipient_role": "Inventory Manager",
+    "type": "SUPPLIER_ALERT",
+    "priority": "MEDIUM",
+    "title": "Supplier Lead Time Change Noted",
+    "message": "Siemens updated standard lead time for S7-1500 PLC modules from 18 to 21 days.",
+    "read": true,
+    "created_at": "2026-10-28T10:35:11.749425",
+    "created_by": "Supplier Integration"
+  },
+  {
+    "notification_id": "NOTIF-011",
+    "recipient_role": "Purchase Manager",
+    "type": "REORDER_TRIGGER",
+    "priority": "HIGH",
+    "title": "Reorder Approved: Spindle Bearing 7210-B",
+    "message": "Reorder recommendation REC-2026-001 converted to PO-2026-015 for 40 units.",
+    "read": true,
+    "created_at": "2026-10-27T10:35:11.749425",
+    "created_by": "Procurement Portal"
+  },
+  {
+    "notification_id": "NOTIF-012",
+    "recipient_role": "Maintenance Team",
+    "type": "SYSTEM_HEALTH",
+    "priority": "LOW",
+    "title": "Daily Telemetry & Consumption Synced",
+    "message": "Machine running hours and spare parts consumption logs successfully verified and updated.",
+    "read": true,
+    "created_at": "2026-10-26T10:35:11.749425",
+    "created_by": "System Monitor"
+  }
+]

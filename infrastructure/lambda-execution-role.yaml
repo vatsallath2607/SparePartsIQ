@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  SparePartsIQ Lambda Execution Role.
+  Creates the minimum-privilege execution role for SparePartsIQ Lambda functions.
+  Managed by Antigravity deployment role via CloudFormation.
+
+Resources:
+  SparePartsIQLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: spareparts-iq-lambda-execution
+      Description: "Minimum-privilege execution role for SparePartsIQ Lambda functions"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Tags:
+        - Key: Project
+          Value: SparePartsIQ
+        - Key: ManagedBy
+          Value: Antigravity
+      Policies:
+        - PolicyName: SparePartsIQ-LambdaRuntimePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: CloudWatchLogs
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/SparePartsIQ-*:*"
+
+              - Sid: DynamoDBReadWrite
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:DescribeTable
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/SparePartsIQ-*"
+                  - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/SparePartsIQ-*/index/*"
+
+              - Sid: S3ReadArtifacts
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub "arn:aws:s3:::sparepartsiq-artifacts-${AWS::AccountId}"
+                  - !Sub "arn:aws:s3:::sparepartsiq-artifacts-${AWS::AccountId}/*"
+
+              - Sid: SNSPublish
+                Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource: !Sub "arn:aws:sns:${AWS::Region}:${AWS::AccountId}:SparePartsIQ-Alerts"
+
+Outputs:
+  RoleArn:
+    Description: ARN of the SparePartsIQ Lambda execution role
+    Value: !GetAtt SparePartsIQLambdaExecutionRole.Arn
+    Export:
+      Name: SparePartsIQ-LambdaExecutionRoleArn
+
+  RoleName:
+    Description: Name of the SparePartsIQ Lambda execution role
+    Value: !Ref SparePartsIQLambdaExecutionRole
+    Export:
+      Name: SparePartsIQ-LambdaExecutionRoleName
+

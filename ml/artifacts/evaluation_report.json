@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-10-31T08:35:28.775519",
+  "champion_model": "Random_Forest_Regressor",
+  "features": [
+    "lag_1",
+    "lag_2",
+    "lag_7",
+    "lag_14",
+    "rolling_mean_7",
+    "rolling_std_7",
+    "rolling_mean_14",
+    "rolling_mean_30",
+    "machine_utilization_pct",
+    "is_maintenance_day",
+    "day_of_week",
+    "month"
+  ],
+  "split_strategy": "Chronological (70% Train, 15% Val, 15% Test)",
+  "models_evaluated": {
+    "Moving_Average_7D": {
+      "validation": {
+        "MAE": 0.534,
+        "RMSE": 0.8209,
+        "MAPE_pct": 75.8
+      },
+      "test": {
+        "MAE": 0.5558,
+        "RMSE": 0.8583,
+        "MAPE_pct": 75.54
+      }
+    },
+    "Exponential_Smoothing": {
+      "validation": {
+        "MAE": 0.6771,
+        "RMSE": 0.8383,
+        "MAPE_pct": 46.83
+      },
+      "test": {
+        "MAE": 0.6815,
+        "RMSE": 0.8606,
+        "MAPE_pct": 46.25
+      }
+    },
+    "Random_Forest_Regressor": {
+      "validation": {
+        "MAE": 0.4908,
+        "RMSE": 0.6451,
+        "MAPE_pct": 54.7
+      },
+      "test": {
+        "MAE": 0.4802,
+        "RMSE": 0.6155,
+        "MAPE_pct": 59.13
+      }
+    },
+    "Gradient_Boosting_Regressor": {
+      "validation": {
+        "MAE": 0.5052,
+        "RMSE": 0.6724,
+        "MAPE_pct": 57.96
+      },
+      "test": {
+        "MAE": 0.4777,
+        "RMSE": 0.6165,
+        "MAPE_pct": 59.3
+      }
+    }
+  }
+}

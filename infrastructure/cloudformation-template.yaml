@@ -1,0 +1,307 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SparePartsIQ - Autonomous Industrial Spare Parts Intelligence and Inventory Optimization Platform Infrastructure'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: SparePartsIQ
+  Environment:
+    Type: String
+    Default: Development
+  ExecutionRoleArn:
+    Type: String
+    Default: arn:aws:iam::985539784799:role/Antigravity-SparePartsIQ-Role
+  S3BucketName:
+    Type: String
+    Default: sparepartsiq-artifacts-985539784799
+
+Resources:
+  # S3 Bucket for ML models, datasets, and static assets
+  ProjectArtifactsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: Antigravity
+
+  # SNS Topic for Automated Inventory & Maintenance Alerts
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: SparePartsIQ-Alerts
+      DisplayName: SparePartsIQ Industrial Alerts
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: Antigravity
+
+  # EventBridge Rule for Periodic Inventory Forecasting (02:00 UTC daily)
+  DailyForecastingRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: SparePartsIQ-DailyForecastingRule
+      Description: Triggers daily automated spare parts demand forecasting and stockout assessment
+      ScheduleExpression: cron(0 2 * * ? *)
+      State: ENABLED
+
+  # DynamoDB Table 1: Users
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-Users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: EmailIndex
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 2: Spare Parts
+  SparePartsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-SpareParts
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: part_id
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+      KeySchema:
+        - AttributeName: part_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CategoryIndex
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 3: Inventory Transactions
+  InventoryTransactionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-InventoryTransactions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: transaction_id
+          AttributeType: S
+        - AttributeName: part_id
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: transaction_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: PartTransactionsIndex
+          KeySchema:
+            - AttributeName: part_id
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 4: Maintenance Schedules
+  MaintenanceSchedulesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-MaintenanceSchedules
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: schedule_id
+          AttributeType: S
+        - AttributeName: machine_id
+          AttributeType: S
+        - AttributeName: scheduled_date
+          AttributeType: S
+      KeySchema:
+        - AttributeName: schedule_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: MachineScheduleIndex
+          KeySchema:
+            - AttributeName: machine_id
+              KeyType: HASH
+            - AttributeName: scheduled_date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 5: Suppliers
+  SuppliersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-Suppliers
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: supplier_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: supplier_id
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 6: Purchase Orders
+  PurchaseOrdersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-PurchaseOrders
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: po_id
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+      KeySchema:
+        - AttributeName: po_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: StatusIndex
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 7: Forecast Results
+  ForecastResultsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-ForecastResults
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: part_id
+          AttributeType: S
+        - AttributeName: forecast_horizon
+          AttributeType: S
+      KeySchema:
+        - AttributeName: part_id
+          KeyType: HASH
+        - AttributeName: forecast_horizon
+          KeyType: RANGE
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 8: Reorder Recommendations
+  ReorderRecommendationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-ReorderRecommendations
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: recommendation_id
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+      KeySchema:
+        - AttributeName: recommendation_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: StatusIndex
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # DynamoDB Table 9: Notifications
+  NotificationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SparePartsIQ-Notifications
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: notification_id
+          AttributeType: S
+        - AttributeName: recipient_role
+          AttributeType: S
+        - AttributeName: created_at
+          AttributeType: S
+      KeySchema:
+        - AttributeName: notification_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: RoleNotificationIndex
+          KeySchema:
+            - AttributeName: recipient_role
+              KeyType: HASH
+            - AttributeName: created_at
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # Amazon API Gateway REST API
+  SparePartsApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: SparePartsIQ-API
+      Description: REST API for SparePartsIQ Inventory Intelligence Platform
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+Outputs:
+  S3Bucket:
+    Description: S3 Artifacts Bucket
+    Value: !Ref ProjectArtifactsBucket
+  AlertsTopicArn:
+    Description: SNS Alerts Topic ARN
+    Value: !Ref AlertsTopic
+  ApiGatewayId:
+    Description: API Gateway REST API ID
+    Value: !Ref SparePartsApi
+
