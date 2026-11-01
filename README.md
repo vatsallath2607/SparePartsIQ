@@ -334,6 +334,7 @@ For in-depth architectural and operational guides, refer to the following projec
 - [AWS Serverless Deployment Guide](AWS_DEPLOYMENT_GUIDE.md)
 - [Final AWS Cost & Resource Audit](SPAREPARTSIQ_FINAL_AWS_COST_AUDIT.md)
 - [Machine Learning Implementation Report](ML_IMPLEMENTATION_REPORT.md)
+- [Machine Learning Faculty Demonstration Guide](docs/ML_FACULTY_DEMONSTRATION_GUIDE.md)
 - [Comprehensive Security Audit & Remediation](SPAREPARTSIQ_SECURITY_AUDIT.md)
 - [API Documentation & Schema](API_DOCUMENTATION.md)
 - [Live Demonstration Walkthrough](PROJECT_DEMONSTRATION_GUIDE.md)
